@@ -1,0 +1,101 @@
+﻿@model TownSim.ViewModels.GameViewModel
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Town Sim</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            Day:
+        </div>
+        <div class="col-md-1">
+            @Model.gameDatas.Day
+        </div>
+        <div class="col-md-9">
+            <a href="#" class="btn btn-default btn-xs">next day</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            Actions Left:
+        </div>
+        <div class="col-md-1">
+            1 of @Model.gameDatas.Actions
+        </div>
+        <div class="col-md-9">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            Villagers:
+        </div>
+        <div class="col-md-1">
+            1
+        </div>
+        <div class="col-md-9">
+            <p>Each villager provides 1 action and consumes 1 food and 2 water a day</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            Houses:
+        </div>
+        <div class="col-md-1">
+            1
+        </div>
+        <div class="col-md-9 ">
+            <a href="#" class="btn btn-default btn-xs">Build</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            Wells:
+        </div>
+        <div class="col-md-1">
+            1
+        </div>
+        <div class="col-md-9 ">
+            <a href="#" class="btn btn-default btn-xs">Build</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            Food:
+        </div>
+        <div class="col-md-1">
+            1
+        </div>
+        <div class="col-md-9 ">
+            <a href="#" class="btn btn-default btn-xs">Gather</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            Water:
+        </div>
+        <div class="col-md-1">
+            1
+        </div>
+        <div class="col-md-9 ">
+            <a href="#" class="btn btn-default btn-xs">Gather</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            Wood:
+        </div>
+        <div class="col-md-1">
+            1
+        </div>
+        <div class="col-md-9 ">
+            <a href="#" class="btn btn-default btn-xs">Gather</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p><a href="#" class="btn btn-default btn-xs">Explore</a>(Great risk! Great Reward)</p>
+        </div>
+    </div>
+</div>
