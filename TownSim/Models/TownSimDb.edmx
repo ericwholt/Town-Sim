@@ -4,91 +4,48 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TownSimDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Buildings">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="House" Type="int" />
-          <Property Name="Well" Type="int" />
-          <Property Name="Farm" Type="int" />
-        </EntityType>
+    <Schema Namespace="TownSimDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="GameData">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Day" Type="int" />
-          <Property Name="Actions" Type="int" />
-        </EntityType>
-        <EntityType Name="Resources">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Food" Type="int" />
-          <Property Name="Water" Type="int" />
-          <Property Name="Wood" Type="int" />
-          <Property Name="Stone" Type="int" />
-        </EntityType>
-        <EntityType Name="Villagers">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="20" />
+          <Property Name="Day" Type="int" Nullable="false" />
+          <Property Name="Actions" Type="int" Nullable="false" />
+          <Property Name="Villagers" Type="int" Nullable="false" />
+          <Property Name="Houses" Type="int" Nullable="false" />
+          <Property Name="Wells" Type="int" Nullable="false" />
+          <Property Name="Farm" Type="int" Nullable="false" />
+          <Property Name="Food" Type="int" Nullable="false" />
+          <Property Name="Water" Type="int" Nullable="false" />
+          <Property Name="Wood" Type="int" Nullable="false" />
+          <Property Name="Stone" Type="int" Nullable="false" />
         </EntityType>
         <EntityContainer Name="TownSimDbModelStoreContainer">
-          <EntitySet Name="Buildings" EntityType="Self.Buildings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GameData" EntityType="Self.GameData" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Resources" EntityType="Self.Resources" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Villagers" EntityType="Self.Villagers" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TownSimDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Building">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="House" Type="Int32" />
-          <Property Name="Well" Type="Int32" />
-          <Property Name="Farm" Type="Int32" />
-        </EntityType>
         <EntityType Name="GameData">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Day" Type="Int32" />
-          <Property Name="Actions" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Resource">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Food" Type="Int32" />
-          <Property Name="Water" Type="Int32" />
-          <Property Name="Wood" Type="Int32" />
-          <Property Name="Stone" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Villager">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Day" Type="Int32" Nullable="false" />
+          <Property Name="Actions" Type="Int32" Nullable="false" />
+          <Property Name="Villagers" Type="Int32" Nullable="false" />
+          <Property Name="Houses" Type="Int32" Nullable="false" />
+          <Property Name="Wells" Type="Int32" Nullable="false" />
+          <Property Name="Farm" Type="Int32" Nullable="false" />
+          <Property Name="Food" Type="Int32" Nullable="false" />
+          <Property Name="Water" Type="Int32" Nullable="false" />
+          <Property Name="Wood" Type="Int32" Nullable="false" />
+          <Property Name="Stone" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityContainer Name="TownSimDbEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Buildings" EntityType="Self.Building" />
           <EntitySet Name="GameDatas" EntityType="Self.GameData" />
-          <EntitySet Name="Resources" EntityType="Self.Resource" />
-          <EntitySet Name="Villagers" EntityType="Self.Villager" />
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -96,41 +53,20 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="TownSimDbModelStoreContainer" CdmEntityContainer="TownSimDbEntities">
-          <EntitySetMapping Name="Buildings">
-            <EntityTypeMapping TypeName="TownSimDbModel.Building">
-              <MappingFragment StoreEntitySet="Buildings">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="House" ColumnName="House" />
-                <ScalarProperty Name="Well" ColumnName="Well" />
-                <ScalarProperty Name="Farm" ColumnName="Farm" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="GameDatas">
             <EntityTypeMapping TypeName="TownSimDbModel.GameData">
               <MappingFragment StoreEntitySet="GameData">
+                <ScalarProperty Name="Stone" ColumnName="Stone" />
+                <ScalarProperty Name="Wood" ColumnName="Wood" />
+                <ScalarProperty Name="Water" ColumnName="Water" />
+                <ScalarProperty Name="Food" ColumnName="Food" />
+                <ScalarProperty Name="Farm" ColumnName="Farm" />
+                <ScalarProperty Name="Wells" ColumnName="Wells" />
+                <ScalarProperty Name="Houses" ColumnName="Houses" />
+                <ScalarProperty Name="Villagers" ColumnName="Villagers" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Day" ColumnName="Day" />
                 <ScalarProperty Name="Actions" ColumnName="Actions" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Resources">
-            <EntityTypeMapping TypeName="TownSimDbModel.Resource">
-              <MappingFragment StoreEntitySet="Resources">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Food" ColumnName="Food" />
-                <ScalarProperty Name="Water" ColumnName="Water" />
-                <ScalarProperty Name="Wood" ColumnName="Wood" />
-                <ScalarProperty Name="Stone" ColumnName="Stone" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Villagers">
-            <EntityTypeMapping TypeName="TownSimDbModel.Villager">
-              <MappingFragment StoreEntitySet="Villagers">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

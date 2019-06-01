@@ -176,17 +176,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Building.cs">
-      <DependentUpon>TownSimDb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\GameData.cs">
       <DependentUpon>TownSimDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Resource.cs">
-      <DependentUpon>TownSimDb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\TownSimDb.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -201,9 +195,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TownSimDb.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Villager.cs">
-      <DependentUpon>TownSimDb.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -283,6 +274,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\GameView.cshtml" />
+    <Content Include="Views\Home\Build.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

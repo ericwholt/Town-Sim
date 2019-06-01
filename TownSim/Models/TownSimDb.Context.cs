@@ -25,9 +25,6 @@ namespace TownSim.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Building> Buildings { get; set; }
         public virtual DbSet<GameData> GameDatas { get; set; }
-        public virtual DbSet<Resource> Resources { get; set; }
-        public virtual DbSet<Villager> Villagers { get; set; }
     }
 }

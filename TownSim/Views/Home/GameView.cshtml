@@ -1,8 +1,8 @@
-﻿@model TownSim.ViewModels.GameViewModel
+﻿@model TownSim.Models.GameData
 <div class="container">
     <div class="row">
         <div class="col-md-12 text-center">
-            <h1>Town Sim</h1>
+            <h1>Town Sim <a href="@Url.Action("NewGame", "Home")" class="btn btn-default btn-sm">New Game</a></h1>
         </div>
     </div>
     <div class="row">
@@ -10,7 +10,7 @@
             Day:
         </div>
         <div class="col-md-1">
-            @Model.gameDatas.Day
+            @Model.Day
         </div>
         <div class="col-md-9">
             <a href="#" class="btn btn-default btn-xs">next day</a>
@@ -21,7 +21,7 @@
             Actions Left:
         </div>
         <div class="col-md-1">
-            1 of @Model.gameDatas.Actions
+            1 of @Model.Actions
         </div>
         <div class="col-md-9">
 
@@ -32,10 +32,10 @@
             Villagers:
         </div>
         <div class="col-md-1">
-            1
+            @Model.Villagers
         </div>
         <div class="col-md-9">
-            <p>Each villager provides 1 action and consumes 1 food and 2 water a day</p>
+            <p> Each villager provides 1 action and consumes 1 food and 2 water a day</p>
         </div>
     </div>
     <div class="row">
@@ -43,10 +43,10 @@
             Houses:
         </div>
         <div class="col-md-1">
-            1
+            @Model.Houses
         </div>
         <div class="col-md-9 ">
-            <a href="#" class="btn btn-default btn-xs">Build</a>
+            <p><a href="@Url.Action("Build", "Home", new { building = "House"})" class="btn btn-default btn-xs">Build</a> (Costs 5 wood to build)</p>
         </div>
     </div>
     <div class="row">
@@ -54,10 +54,21 @@
             Wells:
         </div>
         <div class="col-md-1">
-            1
+            @Model.Wells
         </div>
         <div class="col-md-9 ">
-            <a href="#" class="btn btn-default btn-xs">Build</a>
+            <a href="@Url.Action("Build", "Home", new { building = "Well"})" class="btn btn-default btn-xs">Build</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            Farms:
+        </div>
+        <div class="col-md-1">
+            @Model.Farm
+        </div>
+        <div class="col-md-9 ">
+            <a href="@Url.Action("Build", "Home", new { building = "Farm"})" class="btn btn-default btn-xs">Build</a>
         </div>
     </div>
     <div class="row">
@@ -65,10 +76,10 @@
             Food:
         </div>
         <div class="col-md-1">
-            1
+            @Model.Food
         </div>
         <div class="col-md-9 ">
-            <a href="#" class="btn btn-default btn-xs">Gather</a>
+            <a href="@Url.Action("Gather", "Home", new { resource = "Food"})" class="btn btn-default btn-xs">Gather</a>
         </div>
     </div>
     <div class="row">
@@ -76,10 +87,10 @@
             Water:
         </div>
         <div class="col-md-1">
-            1
+            @Model.Water
         </div>
         <div class="col-md-9 ">
-            <a href="#" class="btn btn-default btn-xs">Gather</a>
+            <a href="@Url.Action("Gather", "Home", new { resource = "Water"})" class="btn btn-default btn-xs">Gather</a>
         </div>
     </div>
     <div class="row">
@@ -87,15 +98,30 @@
             Wood:
         </div>
         <div class="col-md-1">
-            1
+            @Model.Wood
         </div>
         <div class="col-md-9 ">
-            <a href="#" class="btn btn-default btn-xs">Gather</a>
+            <a href="@Url.Action("Gather", "Home", new { resource = "Wood"})" class="btn btn-default btn-xs">Gather</a>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
-            <p><a href="#" class="btn btn-default btn-xs">Explore</a>(Great risk! Great Reward)</p>
+        <div class="col-md-2 text-right">
+            Stone:
+        </div>
+        <div class="col-md-1">
+            @Model.Stone
+        </div>
+        <div class="col-md-9 ">
+            <a href="@Url.Action("Gather", "Home", new { resource = "Stone"})" class="btn btn-default btn-xs">Gather</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+        </div>
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-9">
+            <p><a href="@Url.Action("Explore", "Home")" class="btn btn-default btn-xs">Explore</a>(Great risk! Great Reward)</p>
         </div>
     </div>
 </div>

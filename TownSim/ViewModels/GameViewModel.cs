@@ -8,9 +8,6 @@ namespace TownSim.ViewModels
 {
     public class GameViewModel
     {
-        public Building Buildings { get; set; }
-        public Resource Resources { get; set; }
-        public Villager Villagers { get; set; }
         public GameData gameDatas { get; set; }
     }
 }

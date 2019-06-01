@@ -15,7 +15,15 @@ namespace TownSim.Models
     public partial class GameData
     {
         public int Id { get; set; }
-        public Nullable<int> Day { get; set; }
-        public Nullable<int> Actions { get; set; }
+        public int Day { get; set; }
+        public int Actions { get; set; }
+        public int Villagers { get; set; }
+        public int Houses { get; set; }
+        public int Wells { get; set; }
+        public int Farm { get; set; }
+        public int Food { get; set; }
+        public int Water { get; set; }
+        public int Wood { get; set; }
+        public int Stone { get; set; }
     }
 }
