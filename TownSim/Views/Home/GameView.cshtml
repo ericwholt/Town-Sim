@@ -1,8 +1,24 @@
 ﻿@model TownSim.Models.GameData
+<head>
+    <link href="~/Content/GameLose.css" rel="stylesheet" />
+</head>
 <div class="container">
     <div class="row">
         <div class="col-md-12 text-center">
             <h1>Town Sim <a href="@Url.Action("NewGame", "Home")" class="btn btn-default btn-sm">New Game</a></h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10 text-center">
+
+            <p class="lead">
+                The goal of this game is to grow you towns population. Once you hit 10 villagers you win the game.
+                If your villagers don't have enought food and water they will die. If all your villagers die then you lose the game.
+            </p>
+        </div>
+        <div class="col-md-1">
         </div>
     </div>
     <div class="row">
@@ -13,7 +29,10 @@
             @Model.Day
         </div>
         <div class="col-md-9">
-            <a href="#" class="btn btn-default btn-xs">next day</a>
+            @if (Model.Actions < 1)
+            {
+                <a href="@Url.Action("NewDay", "Home")" id="nextDay" class="btn btn-success btn-xs">next day</a>
+            }
         </div>
     </div>
     <div class="row">
@@ -21,10 +40,19 @@
             Actions Left:
         </div>
         <div class="col-md-1">
-            1 of @Model.Actions
+            @Model.Actions of @Model.Villagers
         </div>
         <div class="col-md-9">
-
+            <span class="btn-warning btn-xs" id="message" disabled="true">@Session["Message"]</span>
+            <script>
+                if (document.getElementById("message").innerHTML === "") {
+                    document.getElementById("message").className = "hidden";
+                }
+                else
+                {
+                    document.getElementById("message").className = "btn-warning btn-xs";
+                }
+            </script>
         </div>
     </div>
     <div class="row">
@@ -46,7 +74,16 @@
             @Model.Houses
         </div>
         <div class="col-md-9 ">
-            <p><a href="@Url.Action("Build", "Home", new { building = "House"})" class="btn btn-default btn-xs">Build</a> (Costs 5 wood to build)</p>
+            @if (Model.Actions < 1 || Model.Wood < 5)
+            {
+                <p><span class="btn btn-danger btn-xs" disabled="true">Build</span> (Need @(Model.Wood >= 5 ? 0 : 5 - Model.Wood) wood to build)</p>
+
+            }
+            else
+            {
+                <p><a href="@Url.Action("Build", "Home", new { building = "House"})" class="btn btn-success btn-xs">Build</a> (Costs 5 wood to build)</p>
+
+            }
         </div>
     </div>
     <div class="row">
@@ -57,7 +94,16 @@
             @Model.Wells
         </div>
         <div class="col-md-9 ">
-            <a href="@Url.Action("Build", "Home", new { building = "Well"})" class="btn btn-default btn-xs">Build</a>
+            @if (Model.Actions < 1 || Model.Stone < 3 || Model.Wood < 2)
+            {
+                <p><span class="btn btn-danger btn-xs" disabled="true">Build</span> (Need @(Model.Stone >= 3 ? 0 : 3 - Model.Stone) stone and @(Model.Wood >= 2 ? 0 : 2 - Model.Wood) wood to build)</p>
+            }
+            else
+            {
+                <p><a href="@Url.Action("Build", "Home", new { building = "Well"})" class="btn btn-success btn-xs">Build</a> (Costs 3 stone and 2 wood to build)</p>
+
+            }
+
         </div>
     </div>
     <div class="row">
@@ -68,7 +114,14 @@
             @Model.Farm
         </div>
         <div class="col-md-9 ">
-            <a href="@Url.Action("Build", "Home", new { building = "Farm"})" class="btn btn-default btn-xs">Build</a>
+            @if (Model.Actions < 1 || Model.Wood < 3 || Model.Stone < 2)
+            {
+                <p><span class="btn btn-danger btn-xs" disabled="true">Build</span> (Need @(Model.Wood >= 3 ? 0 : 3 - Model.Wood) wood and @(Model.Stone >= 2 ? 0 : 2 - Model.Stone) stone to build)</p>
+            }
+            else
+            {
+                <p><a href="@Url.Action("Build", "Home", new { building = "Farm"})" class="btn btn-success btn-xs">Build</a> (Costs 3 wood and 2 stone to build)</p>
+            }
         </div>
     </div>
     <div class="row">
@@ -76,10 +129,26 @@
             Food:
         </div>
         <div class="col-md-1">
-            @Model.Food
+            <div class="row">
+                <div class="col-md-6 col-md-6">
+                    <span style="color:red">-@Model.Villagers</span>|<span style="color:green">+@Model.Farm</span>
+                </div>
+
+                <div class="col-md-6 col-md-7 text-right">
+                    <span>  @Model.Food</span>
+                </div>
+            </div>
         </div>
         <div class="col-md-9 ">
-            <a href="@Url.Action("Gather", "Home", new { resource = "Food"})" class="btn btn-default btn-xs">Gather</a>
+
+            @if (Model.Actions < 1)
+            {
+                <p><span class="btn btn-danger btn-xs" disabled="true">Gather</span> (Gathers 0 - 4 food)</p>
+            }
+            else
+            {
+                <p><a href="@Url.Action("Gather", "Home", new { resource = "Food"})" class="btn btn-success btn-xs">Gather</a> (Gathers 0-4 food)</p>
+            }
         </div>
     </div>
     <div class="row">
@@ -87,10 +156,26 @@
             Water:
         </div>
         <div class="col-md-1">
-            @Model.Water
+            <div class="row">
+                <div class="col-md-6 col-md-6">
+                    <span style="color:red">-@(Model.Villagers * 2)</span>|<span style="color:green">+@Model.Wells</span>
+                </div>
+                <div class="col-md-6 col-md-7 text-right">
+                    <span>  @Model.Water</span>
+                </div>
+            </div>
         </div>
         <div class="col-md-9 ">
-            <a href="@Url.Action("Gather", "Home", new { resource = "Water"})" class="btn btn-default btn-xs">Gather</a>
+            @if (Model.Actions < 1)
+            {
+                <p><span class="btn btn-danger btn-xs" disabled="true">Gather</span> (Gathers 1-5 water)</p>
+
+            }
+            else
+            {
+                <p><a href="@Url.Action("Gather", "Home", new { resource = "Water"})" class="btn btn-success btn-xs">Gather</a> (Gathers 1-5 water)</p>
+
+            }
         </div>
     </div>
     <div class="row">
@@ -101,7 +186,16 @@
             @Model.Wood
         </div>
         <div class="col-md-9 ">
-            <a href="@Url.Action("Gather", "Home", new { resource = "Wood"})" class="btn btn-default btn-xs">Gather</a>
+            @if (Model.Actions < 1)
+            {
+                <p><span class="btn btn-danger btn-xs" disabled="true">Gather</span> (Gathers 1-5 wood)</p>
+
+            }
+            else
+            {
+                <p><a href="@Url.Action("Gather", "Home", new { resource = "Wood"})" class="btn btn-success btn-xs">Gather</a> (Gathers 1-5 wood)</p>
+
+            }
         </div>
     </div>
     <div class="row">
@@ -112,7 +206,14 @@
             @Model.Stone
         </div>
         <div class="col-md-9 ">
-            <a href="@Url.Action("Gather", "Home", new { resource = "Stone"})" class="btn btn-default btn-xs">Gather</a>
+            @if (Model.Actions < 1)
+            {
+                <p><span class="btn btn-danger btn-xs" disabled="true">Gather</span> (Gathers 1-3 stone)</p>
+            }
+            else
+            {
+                <p><a href="@Url.Action("Gather", "Home", new { resource = "Stone"})" class="btn btn-success btn-xs">Gather</a> (Gathers 1-3 stone)</p>
+            }
         </div>
     </div>
     <div class="row">
@@ -121,7 +222,14 @@
         <div class="col-md-1">
         </div>
         <div class="col-md-9">
-            <p><a href="@Url.Action("Explore", "Home")" class="btn btn-default btn-xs">Explore</a>(Great risk! Great Reward)</p>
+            @if (Model.Actions < 1)
+            {
+                <p><span class="btn btn-danger btn-xs" disabled="true">Explore</span>(Great risk! Great Reward)</p>
+            }
+            else
+            {
+                <p><a href="@Url.Action("Explore", "Home")" class="btn btn-success btn-xs">Explore</a> (Great risk! Great Reward)</p>
+            }
         </div>
     </div>
 </div>
