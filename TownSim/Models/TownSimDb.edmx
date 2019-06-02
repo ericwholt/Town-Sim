@@ -20,6 +20,7 @@
           <Property Name="Water" Type="int" Nullable="false" />
           <Property Name="Wood" Type="int" Nullable="false" />
           <Property Name="Stone" Type="int" Nullable="false" />
+          <Property Name="Castles" Type="int" />
         </EntityType>
         <EntityContainer Name="TownSimDbModelStoreContainer">
           <EntitySet Name="GameData" EntityType="Self.GameData" Schema="dbo" store:Type="Tables" />
@@ -43,6 +44,7 @@
           <Property Name="Water" Type="Int32" Nullable="false" />
           <Property Name="Wood" Type="Int32" Nullable="false" />
           <Property Name="Stone" Type="Int32" Nullable="false" />
+          <Property Name="Castles" Type="Int32" />
         </EntityType>
         <EntityContainer Name="TownSimDbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="GameDatas" EntityType="Self.GameData" />
@@ -56,6 +58,7 @@
           <EntitySetMapping Name="GameDatas">
             <EntityTypeMapping TypeName="TownSimDbModel.GameData">
               <MappingFragment StoreEntitySet="GameData">
+                <ScalarProperty Name="Castles" ColumnName="Castles" />
                 <ScalarProperty Name="Stone" ColumnName="Stone" />
                 <ScalarProperty Name="Wood" ColumnName="Wood" />
                 <ScalarProperty Name="Water" ColumnName="Water" />

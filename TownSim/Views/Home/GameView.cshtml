@@ -4,21 +4,35 @@
 </head>
 <div class="container">
     <div class="row">
-        <div class="col-md-12 text-center">
-            <h1>Town Sim <a href="@Url.Action("NewGame", "Home")" class="btn btn-default btn-sm">New Game</a></h1>
+        <div class="col-md-3">
+            <h1>Town Sim</h1>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-1">
-        </div>
-        <div class="col-md-10 text-center">
+        <div class="col-md-9 text-center">
 
             <p class="lead">
-                The goal of this game is to grow you towns population. Once you hit 10 villagers you win the game.
-                If your villagers don't have enought food and water they will die. If all your villagers die then you lose the game.
+                The goal of this game is to grow your towns population. Get to 10 villagers, you win the game.
+                If your villagers don't have enough food and water they will die. If all your villagers die, you lose the game.
             </p>
         </div>
+        @*<div class="col-md-1">
+        </div>*@
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            <strong><u>Info</u></strong>
+        </div>
         <div class="col-md-1">
+            <div class="row">
+                <div class="col-md-6 col-md-5">
+                    <span><strong><u>Qty</u></strong></span>
+                </div>
+                <div class="col-md-6 col-md-7 text-right text-capitalize">
+                    <span style="color:red"><strong><u>-</u></strong></span><strong><u>|</u></strong><span style="color:green"><strong><u>+</u></strong></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <strong><u>Action/Description</u></strong>
         </div>
     </div>
     <div class="row">
@@ -40,7 +54,7 @@
             Actions Left:
         </div>
         <div class="col-md-1">
-            @Model.Actions of @Model.Villagers
+            @Model.Actions/@Model.Villagers
         </div>
         <div class="col-md-9">
             <span class="btn-warning btn-xs" id="message" disabled="true">@Session["Message"]</span>
@@ -48,8 +62,7 @@
                 if (document.getElementById("message").innerHTML === "") {
                     document.getElementById("message").className = "hidden";
                 }
-                else
-                {
+                else {
                     document.getElementById("message").className = "btn-warning btn-xs";
                 }
             </script>
@@ -76,12 +89,12 @@
         <div class="col-md-9 ">
             @if (Model.Actions < 1 || Model.Wood < 5)
             {
-                <p><span class="btn btn-danger btn-xs" disabled="true">Build</span> (Need @(Model.Wood >= 5 ? 0 : 5 - Model.Wood) wood to build)</p>
+                <p><span class="btn btn-danger btn-xs" disabled="true">Build</span> (Need @(Model.Wood >= 5 ? 0 : 5 - Model.Wood) wood to build) Raises population and gives more actions. You consume more resources.</p>
 
             }
             else
             {
-                <p><a href="@Url.Action("Build", "Home", new { building = "House"})" class="btn btn-success btn-xs">Build</a> (Costs 5 wood to build)</p>
+                <p><a href="@Url.Action("Build", "Home", new { building = "House"})" class="btn btn-success btn-xs">Build</a> (Costs 5 wood to build) Raises population and gives more actions. You consume more resources.</p>
 
             }
         </div>
@@ -96,11 +109,11 @@
         <div class="col-md-9 ">
             @if (Model.Actions < 1 || Model.Stone < 3 || Model.Wood < 2)
             {
-                <p><span class="btn btn-danger btn-xs" disabled="true">Build</span> (Need @(Model.Stone >= 3 ? 0 : 3 - Model.Stone) stone and @(Model.Wood >= 2 ? 0 : 2 - Model.Wood) wood to build)</p>
+                <p><span class="btn btn-danger btn-xs" disabled="true">Build</span> (Need @(Model.Stone >= 3 ? 0 : 3 - Model.Stone) stone and @(Model.Wood >= 2 ? 0 : 2 - Model.Wood) wood to build) Each well produces 1 water per day</p>
             }
             else
             {
-                <p><a href="@Url.Action("Build", "Home", new { building = "Well"})" class="btn btn-success btn-xs">Build</a> (Costs 3 stone and 2 wood to build)</p>
+                <p><a href="@Url.Action("Build", "Home", new { building = "Well"})" class="btn btn-success btn-xs">Build</a> (Costs 3 stone and 2 wood to build) Each well produces 1 water per day</p>
 
             }
 
@@ -116,11 +129,29 @@
         <div class="col-md-9 ">
             @if (Model.Actions < 1 || Model.Wood < 3 || Model.Stone < 2)
             {
-                <p><span class="btn btn-danger btn-xs" disabled="true">Build</span> (Need @(Model.Wood >= 3 ? 0 : 3 - Model.Wood) wood and @(Model.Stone >= 2 ? 0 : 2 - Model.Stone) stone to build)</p>
+                <p><span class="btn btn-danger btn-xs" disabled="true">Build</span> (Need @(Model.Wood >= 3 ? 0 : 3 - Model.Wood) wood and @(Model.Stone >= 2 ? 0 : 2 - Model.Stone) stone to build) Each farm adds one food per day</p>
             }
             else
             {
-                <p><a href="@Url.Action("Build", "Home", new { building = "Farm"})" class="btn btn-success btn-xs">Build</a> (Costs 3 wood and 2 stone to build)</p>
+                <p><a href="@Url.Action("Build", "Home", new { building = "Farm"})" class="btn btn-success btn-xs">Build</a> (Costs 3 wood and 2 stone to build) Each farm adds one food per day</p>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 text-right">
+            Castles:
+        </div>
+        <div class="col-md-1">
+            @Model.Castles
+        </div>
+        <div class="col-md-9 ">
+            @if (Model.Actions < 1 || Model.Wood < 10 || Model.Stone < 10)
+            {
+            <p><span class="btn btn-danger btn-xs" disabled="true">Build</span> (Need @(Model.Stone >= 10 ? 0 : 10 - Model.Stone) stone and @(Model.Wood >= 10 ? 0 : 10 - Model.Wood) wood to build) Stops attacks on your town</p>
+            }
+            else
+            {
+                <p><a href="@Url.Action("Build", "Home", new { building = "Farm"})" class="btn btn-success btn-xs">Build</a> (Costs 3 wood and 2 stone to build) Stops attacks on your town</p>
             }
         </div>
     </div>
@@ -130,12 +161,22 @@
         </div>
         <div class="col-md-1">
             <div class="row">
-                <div class="col-md-6 col-md-6">
-                    <span style="color:red">-@Model.Villagers</span>|<span style="color:green">+@Model.Farm</span>
-                </div>
-
-                <div class="col-md-6 col-md-7 text-right">
+                <div class="col-md-6 col-md-5">
                     <span>  @Model.Food</span>
+                </div>
+                <div class="col-md-6 col-md-7 text-right">
+                    @if (Model.Villagers - Model.Farm > 0)
+                    {
+                        <span style="color:red ">-@(Model.Villagers - Model.Farm)</span>
+                    }
+                    else if (Model.Farm - Model.Villagers == 0)
+                    {
+                        <span>0</span>
+                    }
+                    else
+                    {
+                        <span style="color:green">+@(Model.Farm - Model.Villagers) </span>
+                    }
                 </div>
             </div>
         </div>
@@ -157,11 +198,22 @@
         </div>
         <div class="col-md-1">
             <div class="row">
-                <div class="col-md-6 col-md-6">
-                    <span style="color:red">-@(Model.Villagers * 2)</span>|<span style="color:green">+@Model.Wells</span>
+                <div class="col-md-6 col-md-5">
+                    <span>  @Model.Water</span>
                 </div>
                 <div class="col-md-6 col-md-7 text-right">
-                    <span>  @Model.Water</span>
+                    @if ((Model.Villagers * 2) - Model.Wells > 0)
+                    {
+                        <span style="color:red ">-@((Model.Villagers * 2) - Model.Wells)</span>
+                    }
+                    else if (Model.Wells - (Model.Villagers * 2) == 0)
+                    {
+                        <span>0</span>
+                    }
+                    else
+                    {
+                        <span style="color:green">+@(Model.Wells - Model.Villagers * 2) </span>
+                    }
                 </div>
             </div>
         </div>

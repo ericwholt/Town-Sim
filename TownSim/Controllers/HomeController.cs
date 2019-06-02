@@ -43,66 +43,82 @@ namespace TownSim.Controllers
         {
             Session["Message"] = null;
             GameData game = db.GameDatas.ToList().First();
-            //check for raiders if day > 5
+            int chanceForAttack = rnd.Next(1, 101);
+
+            //check if we have lost all our villagers. If so then lose the game.
             if (game.Villagers <= 0)
             {
-                return RedirectToAction("GameLose");
                 //show lose game view
+                return RedirectToAction("GameLose");
             }
             else
             {
-                
+                //If we have more houses than villagers display message saying they are moving in.
                 if (game.Houses > game.Villagers)
                 {
-                    int diff = game.Houses - game.Villagers;
-                    if (diff == 1)
+                    int villagersMovingIn = game.Houses - game.Villagers; //How many villagers are moving in
+
+                    //for grammar of message
+                    if (villagersMovingIn == 1)
                     {
                         Session["Message"] = $"A new villager moved in!";
                     }
                     else
                     {
-                        Session["Message"] = $"{diff} new villager moved in!";
+                        Session["Message"] = $"{villagersMovingIn} new villagers moved in!";
                     }
 
                 }
                 game.Villagers = game.Houses;
             }
+
+            //If we have 10 or more villagers the game is won
             if (game.Villagers >= 10)
             {
                 return RedirectToAction("GameWin");
             }
             else
-            {                
-                game.Water += game.Wells;
+            {
+                //Calculate next day
+                //Produce before we consume
+                game.Water += game.Wells; 
                 game.Food += game.Farm;
 
                 for (int i = 0; i < game.Villagers; i++)
                 {
+                    //consume water if we have it
                     if (game.Water >= 2)
                     {
                         game.Water -= 2;
                     }
-                    else
+                    else //We don't have water for this villager so kill it.
                     {
-                        game.Villagers--;
-                        game.Actions = game.Villagers;
+                        //Check to see if we have villager to avoid negative. This should always be true just a saftey in case sky is falling.
+                        if(game.Villagers > 0)
+                        {
+                             game.Villagers--;
+                        }
                     }
 
+                    //If we have food and a villager left then consume food
                     if (game.Food >= 1 && game.Villagers > 0)
                     {
                         game.Food--;
                     }
-                    else
+                    else //We don't have food
                     {
-                        game.Villagers--;
-                        game.Actions = game.Villagers;
+                        //Do we have villagers? Then kill one.
+                        if (game.Villagers > 0) 
+                        {
+                            game.Villagers--;
+                        }
                     }
                 }
                 //check for loss again so we don't have to wait for new day click
                 if (game.Villagers <= 0)
                 {
-                    return RedirectToAction("GameLose");
                     //show lose game view
+                    return RedirectToAction("GameLose");
                 }
                 //Handle day transition
                 game.Day++;
@@ -110,41 +126,61 @@ namespace TownSim.Controllers
                 db.GameDatas.AddOrUpdate(game);
                 db.SaveChanges();
             }
-
+            //Check if raiders can attempt to attack the Town.
+            if (chanceForAttack > 90 && game.Day > 15 && game.Castles <= 0)
+            {
+                return RedirectToAction("Raiders");
+            }
             return RedirectToAction("GameView");
         }
 
+        //Add buildings logic
         public ActionResult Build(string building)
         {
-            GameData game = db.GameDatas.ToList().First();
+            GameData game = db.GameDatas.ToList().First(); //Get latest data from database
+
+            //Do we have the actions to do this? View should always make this true, but double check in case they put url in manually
             if (game.Actions >= 1)
             {
 
+                game.Actions--;// Use one action.
+                //Cycle through building types passed through parameter and see if they match and we have resources.
                 if (building == "House" && game.Wood >= 5)
                 {
-                    game.Actions--;
                     game.Houses++;
                     game.Wood -= 5;
                 }
                 else if (building == "Well" && game.Stone >= 3 && game.Wood >= 2)
                 {
-                    game.Actions--;
                     game.Stone -= 3;
                     game.Wood -= 2;
                     game.Wells++;
                 }
                 else if (building == "Farm" && game.Stone >= 2 && game.Wood >= 3)
-                {
-                    game.Actions--;
+                {                    
                     game.Stone -= 2;
                     game.Wood -= 3;
                     game.Farm++;
+                }
+                else if (building == "Castle" && game.Stone >= 10 && game.Wood >= 10 && game.Houses >= 5)
+                {
+                    game.Stone -= 10;
+                    game.Wood -= 10;
+                    game.Castles++;
+                }
+                else
+                {
+                    //Shouldn't get here unless url is put in manually with incorrect building type
+                    game.Actions++; // then give them back their action
+                    return RedirectToAction("GameView"); //Send them back to gameview. No need to update and save database
                 }
                 db.GameDatas.AddOrUpdate(game);
                 db.SaveChanges();
             }
             return RedirectToAction("GameView");
         }
+
+        //Gather Resource logic
         public ActionResult Gather(string resource)
         {
             GameData game = db.GameDatas.ToList().First();
@@ -154,28 +190,37 @@ namespace TownSim.Controllers
                 int amount = rnd.Next(1, 7) - 1;
                 if (resource == "Food")
                 {
-                    int[] foodFound = { 0, 2, 2, 2, 3, 4 };
+                    //Random 0-4 food gathered weighted for middle
+                    int[] foodFound = { 0, 1, 2, 2, 3, 4 };
                     game.Food += foodFound[amount];
                     Session["Message"] = $"Villager gathered {foodFound[amount]} food.";
-                    //Random 0-4 food gathered
                 }
                 else if (resource == "Water")
                 {
-                    int[] waterFound = { 1, 2, 2, 3, 4, 5 };
+                    //Random 1-5 water gathered weighted for middle
+                    int[] waterFound = { 1, 2, 3, 3, 4, 5 };
                     game.Water += waterFound[amount];
                     Session["Message"] = $"Villager gathered {waterFound[amount]} gallons of water.";
                 }
                 else if (resource == "Wood")
                 {
-                    int[] woodFound = { 1, 2, 2, 3, 4, 5 };
+                    //Random 1-5 water gathered weighted for middle
+                    int[] woodFound = { 1, 2, 3, 3, 4, 5 };
                     game.Wood += woodFound[amount];
                     Session["Message"] = $"Villager gathered {woodFound[amount]} wood.";
                 }
                 else if (resource == "Stone")
                 {
-                    int[] stoneFound = { 1, 2, 2, 2, 3, 4 };
+                    //Random 1-5 water gathered weighted for middle
+                    int[] stoneFound = { 1, 2, 2, 3, 3, 4 };
                     game.Stone += stoneFound[amount];
                     Session["Message"] = $"Villager gathered {stoneFound[amount]} stones.";
+                }
+                else
+                {
+                    //Shouldn't get here unless url is put in manually with incorrect resource type
+                    game.Actions++; // then give them back their action
+                    return RedirectToAction("GameView"); //Send them back to gameview. No need to update and save database
                 }
                 db.GameDatas.AddOrUpdate(game);
                 db.SaveChanges();
@@ -183,9 +228,11 @@ namespace TownSim.Controllers
             return RedirectToAction("GameView");
         }
 
+        //Explore Logic
         public ActionResult Explore()
         {
-            GameData game = db.GameDatas.ToList().First();
+            GameData game = db.GameDatas.ToList().First(); //Get latest game state from database
+
             if (game.Actions >= 1)
             {
                 game.Actions--;
@@ -232,7 +279,7 @@ namespace TownSim.Controllers
                     {
                         if (game.Houses > 0)
                         {
-                            Session["Message"] = $"Your villager was killed by a rival towns villager, and the enemy burned down your villagers house.";
+                            Session["Message"] = $"Your villager was killed by a rival towns villager, and the enemy burned down that villagers house.";
                             game.Houses--;
                         }
                     }
@@ -240,6 +287,39 @@ namespace TownSim.Controllers
                 db.GameDatas.AddOrUpdate(game);
                 db.SaveChanges();
             }
+            return RedirectToAction("GameView");
+        }
+
+        public ActionResult Raiders()
+        {
+            GameData game = db.GameDatas.ToList().First();
+
+            int[] weightedRaiderActions = { 1, 2, 2, 2, 3, 3 };
+            string[] animals = { "vicuna", "wildcat", "peccary", "ibex", "rabbit", "hog", "bear", "racoon", "chimpanzee", "armadillo", "mongoose", "mule", "rhinoceros", "cat", "meerkat" };
+            int raiderAction = weightedRaiderActions[rnd.Next(0, weightedRaiderActions.Length)];
+            string animal = animals[rnd.Next(0, animals.Length)];
+            int deaths = rnd.Next(1, 3);
+
+            switch (raiderAction)
+            {
+                case 1:
+                    Session["Message"] = $"A {animal} kills {deaths} villagers and burns down their houses.";
+                    game.Villagers -= deaths;
+                    game.Houses -= deaths;
+                    break;
+                case 2:
+                    Session["Message"] = $"A {animal} eats {raiderAction} days of food before it runs off.";
+                    game.Food -= raiderAction;
+                    break;
+                case 3:
+                    Session["Message"] = $"A {animal} drinks {raiderAction} gallons of water before it runs off.";
+                    game.Water -= raiderAction;
+                    break;
+                default:
+                    break;
+            }
+            db.GameDatas.AddOrUpdate(game);
+            db.SaveChanges();
             return RedirectToAction("GameView");
         }
 
@@ -261,9 +341,10 @@ namespace TownSim.Controllers
             game.Farm = 0;
             game.Food = 6;
             game.Houses = 1;
+            game.Castles = 0;
             game.Stone = 0;
             game.Villagers = 1;
-            game.Water = 6;
+            game.Water = 8;
             game.Wells = 0;
             game.Wood = 0;
             db.GameDatas.AddOrUpdate(game);

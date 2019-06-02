@@ -25,5 +25,6 @@ namespace TownSim.Models
         public int Water { get; set; }
         public int Wood { get; set; }
         public int Stone { get; set; }
+        public Nullable<int> Castles { get; set; }
     }
 }
