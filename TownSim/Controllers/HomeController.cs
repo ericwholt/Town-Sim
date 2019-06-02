@@ -284,10 +284,14 @@ namespace TownSim.Controllers
                     }
                     else
                     {
-                        if (game.Houses > 0)
+                        if (game.Houses > 0 && game.Castles <= 0)
                         {
-                            Session["Message"] = $"Your villager was killed by a rival towns villager, and the enemy burned down that villagers house.";
+                            Session["Message"] = $"Your villager was killed by a rival towns villager, and the enemy burned down that villagers house!";
                             game.Houses--;
+                        }
+                        else
+                        {
+                            Session["Message"] = $"Your villager was killed by a rival towns villager!";
                         }
                     }
                 }
@@ -297,6 +301,8 @@ namespace TownSim.Controllers
                     game.Actions++; // then give them back their action
                     return RedirectToAction("GameView"); //Send them back to gameview. No need to update and save database
                 }
+
+                //Game State
                 db.GameDatas.AddOrUpdate(game);
                 db.SaveChanges();
             }
@@ -331,25 +337,60 @@ namespace TownSim.Controllers
                     //for proper grammar
                     if (deaths == 1)
                     {
-                        
                         Session["Message"] = $"A {animal} kills a villager and burns down their house.";
-
                     }
                     else
                     {
                         Session["Message"] = $"A {animal} kills {deaths} villagers and burns down their houses.";
                     }
 
-                    game.Villagers -= deaths; //Remove the villagers that died
-                    game.Houses -= deaths; //Remove houses for the villagers
+                    //check to make sure villagers doesn't go into the negative
+                    if (game.Villagers >= deaths)
+                    {
+                        game.Villagers -= deaths; //Remove the villagers that died
+                    }
+                    else
+                    {
+                        game.Villagers = 0;
+                    }
+
+                    //check to make sure houses doesn't go into the negative
+                    if (game.Houses >= deaths)
+                    {
+                        game.Houses -= deaths; //Remove houses for the villagers
+                    }
+                    else
+                    {
+                        game.Houses = 0;
+                    }
                     break;
                 case 2: //Raider takes food
+
+                    //check to make sure food doesn't go into the negative
+                    if (game.Food >= raiderAction)
+                    {
                     Session["Message"] = $"A {animal} eats {raiderAction} days of food before it runs off.";
                     game.Food -= raiderAction; //Remove food
+                    }
+                    else
+                    {
+                        Session["Message"] = $"A {animal} eats all the food before it runs off.";
+                        game.Food = 0;
+                    }
                     break;
                 case 3: //Raider takes water
+
+                    //check to make sure water doesn't go into the negative
+                    if (game.Water >= raiderAction)
+                    {
                     Session["Message"] = $"A {animal} drinks {raiderAction} gallons of water before it runs off.";
                     game.Water -= raiderAction; //Remove water
+                    }
+                    else
+                    {
+                        Session["Message"] = $"A {animal} drinks all the water before it runs off.";
+                        game.Water = 0;
+                    }
                     break;
             }
 
